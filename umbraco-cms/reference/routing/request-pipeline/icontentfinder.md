@@ -27,6 +27,9 @@ The ContentFinder can set the PublishedContent item for the request, or template
 This IContentFinders will find a document with id 1234, when the Url begins with /woot.
 
 ```csharp
+using Umbraco.Cms.Core.Routing;
+using Umbraco.Cms.Core.Web;
+
 public class MyContentFinder : IContentFinder
 {
     private readonly IUmbracoContextAccessor _umbracoContextAccessor;
@@ -38,7 +41,7 @@ public class MyContentFinder : IContentFinder
 
     public Task<bool> TryFindContent(IPublishedRequestBuilder contentRequest)
     {
-        var path = contentRequest.Uri.GetAbsolutePathDecoded();
+        var path = contentRequest.AbsolutePathDecoded;
         if (path.StartsWith("/woot") is false)
         {
             return Task.FromResult(false); // Not found
@@ -68,7 +71,7 @@ public class MyContentFinder : IContentFinder
 
 You either use an extension on the Umbraco builder or, a composer to access the `ContentFinderCollection` to add and remove specific `ContentFinders`
 
-#### Umbraco builder extension
+#### Via Umbraco builder extension
 
 First create the extension method:
 
@@ -113,7 +116,7 @@ public void ConfigureServices(IServiceCollection services)
 }
 ```
 
-#### Composer
+#### Via Composer
 
 ```csharp
 using Umbraco.Cms.Core.Composing;
